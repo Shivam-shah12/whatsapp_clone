@@ -9,7 +9,6 @@ import {FcGoogle} from 'react-icons/fc'
 import { reducerCases } from '@/reducer/constants.js';
 import { useDispatch } from 'react-redux';
 import { setNewUser, setUser } from '@/reducer/Slices/authSlice';
-import { firebaseAuth } from '@/utils/FirebaseConfig';
 
 function login() {
   const router=useRouter();
