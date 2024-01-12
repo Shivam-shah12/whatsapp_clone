@@ -25,7 +25,7 @@ server.listen(process.env.PORT, () => {
 
 const io = new Server(server, {
   cors: {
-    origin: "https://whatsapp-clone-blond-seven.vercel.app/",
+    origin: "https://chatwebapplication.vercel.app/",
   },
 });
 
