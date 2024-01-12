@@ -17,14 +17,15 @@ app.use("/uploads/images", express.static("uploads/images"));
 app.use("/uploads/document",express.static("uploads/document"))
 app.use("/api/auth", AuthRoutes);
 app.use("/api/messages", MessageRoutes);
+const PORT=process.env.PORT || 8000
 
 server.listen(process.env.PORT, () => {
-  console.log(`server is running at PORT Number ${process.env.PORT} `);
+  console.log(`server is running at PORT Number ${PORT} `);
 });
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://whatsapp-clone-blond-seven.vercel.app/",
   },
 });
 

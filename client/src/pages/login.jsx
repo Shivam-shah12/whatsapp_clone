@@ -9,12 +9,14 @@ import {FcGoogle} from 'react-icons/fc'
 import { reducerCases } from '@/reducer/constants.js';
 import { useDispatch } from 'react-redux';
 import { setNewUser, setUser } from '@/reducer/Slices/authSlice';
+import { firebaseAuth } from '@/utils/FirebaseConfig';
 
 function login() {
   const router=useRouter();
   const dispatch=useDispatch();
   const handleLogin=async ()=>{
    const provider=new GoogleAuthProvider();
+   console.log(provider)
   const {user}=await signInWithPopup(firebaseAuth,provider);
   //  console.log(user.email + " "+user.displayName+" "+user.photoURL);
    try {
@@ -44,7 +46,7 @@ function login() {
         }
      }
    } catch (error) {
-    console.log(error)
+    console.log("error in login = "+error)
    }
   }
   return (

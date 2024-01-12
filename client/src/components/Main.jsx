@@ -31,7 +31,6 @@ function Main() {
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (currentUser) => {
       if (!currentUser) {setRedirectLogin(true);}
       if (!userInfo && currentUser?.email) {
-        console.log("Ye bhi chal raha hai")
         const { data } = await axios.post(CHECK_USER_ROUTE, { email: currentUser.email });
         dispatch(setUser(data.data));
         if (!data.status) {

@@ -1,4 +1,5 @@
-export const HOST="http://localhost:8000";
+// export const HOST="http://localhost:8000";
+export const HOST="https://chat-web-application-n2q6.onrender.com"
 
 const AUTH_ROUTES=`${HOST}/api/auth`;
 const MESSAGE_ROUTES=`${HOST}/api/messages`
