@@ -28,8 +28,8 @@ export const checkUser = async (req, res, next) => {
 
 export const onBoardUser = async (req, res, next) => {
     try {
-        const { email, name, about, image: profilePicture } = req.body;
-        if (!email || !name || !profilePicture) {
+        const { email, name, about, image  } = req.body;
+        if (!email || !name || image ) {
             return res.json({ msg: "Email, Name, and Image are required", status: false });
         }
 
@@ -44,7 +44,7 @@ export const onBoardUser = async (req, res, next) => {
 
         // If the user doesn't exist, create a new one
         const user = await prisma.user.create({
-            data: { email, name, about, profilePicture }
+            data: { email, name, about, image }
         });
 
         return res.json({ msg: "User created successfully", status: true, user });
