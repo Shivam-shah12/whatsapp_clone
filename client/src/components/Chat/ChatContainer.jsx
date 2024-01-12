@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import MessageStatus from "../common/MessageStatus";
 import { calculateTime } from "@/utils/CalculateTime";
 import ImageMessage from "./ImageMessage";
+import DocumentMessage from './DocumentMessage.jsx'
 import dynamic from "next/dynamic";
 const VoiceMessage=dynamic(()=> import ("./VoiceMessage"),{ssr:false});
 
@@ -44,6 +45,11 @@ function ChatContainer() {
                 {
                   message?.type === "audio" && (
                     <VoiceMessage message={message}/>
+                  )
+                }
+                {
+                  message?.type === "document" && (
+                    <DocumentMessage message={message}/>
                   )
                 }
               </div>

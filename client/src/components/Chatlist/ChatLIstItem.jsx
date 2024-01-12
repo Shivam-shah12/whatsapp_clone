@@ -9,6 +9,7 @@ import { FaCamera, FaMicrophone } from "react-icons/fa";
 
 function ChatLIstItem({data}) {
   const {userInfo,currentChatUser,iscontactsPage}=useSelector((state)=> state.auth);
+ console.log(data);
   const dispatch=useDispatch();
   const handleContactClick=()=>{
     if(!iscontactsPage)
@@ -41,7 +42,7 @@ function ChatLIstItem({data}) {
         {
           !iscontactsPage && (
             <div>
-              <span className={`${!data.totalUnreadMessages > 0} ? "text-secondary":"text-icon-green"`}>
+              <span className={`${!data.totalUnreadMessages > 0} ? text-secondary:  text-icon-green`}>
                 {calculateTime(data.createdAt)}
               </span>
             </div>

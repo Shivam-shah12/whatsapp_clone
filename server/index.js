@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/uploads/recordings", express.static("uploads/recordings"));
 app.use("/uploads/images", express.static("uploads/images"));
+app.use("/uploads/document",express.static("uploads/document"))
 app.use("/api/auth", AuthRoutes);
 app.use("/api/messages", MessageRoutes);
 
@@ -27,8 +28,11 @@ const io = new Server(server, {
   },
 });
 
+const users = new Map();
+
 io.on("connection", (socket) => {
   console.log("connected to socket.io");
+  users.set(socket.id);
 
   socket.on("setup", (userId) => {
     socket.join(userId);
@@ -97,5 +101,6 @@ io.on("connection", (socket) => {
     const sendUserSocket = id;
     socket.to(sendUserSocket).emit("accept-call",true);
   });
+
 
 });

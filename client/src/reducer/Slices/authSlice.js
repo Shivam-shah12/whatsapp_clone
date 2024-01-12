@@ -95,7 +95,7 @@ const authSlice = createSlice({
       setExitChat(state,value){
         return {
           ...state,
-          currentChatUser:undefined
+          currentChatUser:value.payload
         }
       }
       
@@ -118,7 +118,8 @@ const authSlice = createSlice({
     setVoiceCall,
     setIncomingVoiceCall,
     setIncomingVideoCall,
-    setEndCall
+    setEndCall,
+    setExitChat
   } = authSlice.actions;
   
   export default authSlice.reducer;

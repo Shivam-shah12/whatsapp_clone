@@ -7,6 +7,7 @@ import axios from "axios";
 
 function List() {
   const {userInfo,userContacts,filteredContacts}=useSelector((state)=> state.auth);
+  console.log(filteredContacts)
   const dispatch=useDispatch();
   useEffect(()=>{
    const getContacts=async ()=>{
@@ -32,11 +33,7 @@ function List() {
         <ChatLIstItem data={contact} key={contact.id}/>
        ))
     }
-    
-    
-    {
-      userContacts.map((contact)=> <ChatLIstItem data={contact} key={contact.id}/>)
-    }
+  
     </div>
     );
 } 

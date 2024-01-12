@@ -3,7 +3,7 @@ import { BsEmojiSmile } from "react-icons/bs";
 import   {ImAttachment}  from 'react-icons/im'
 import {MdSend} from 'react-icons/md'
 import {FaMicrophone} from 'react-icons/fa'
-import { ADD_MESSAGE_ROUTE ,ADD_IMAGE_ROUTE} from "@/utils/ApiRoutes";
+import { ADD_MESSAGE_ROUTE ,ADD_IMAGE_ROUTE,ADD_DOCUMENT_ROUTE} from "@/utils/ApiRoutes";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Input from "../common/Input";
@@ -23,7 +23,7 @@ const CaptureAudio=dynamic(()=> import ("../common/CaptureAudio"),{ssr:false});
 function MessageBar() {
   const dispatch=useDispatch();
   const {socket}=useSelector((state)=> state.auth);
-  console.log(socket);
+  // console.log(socket);
   const allmessage=useSelector((state)=>state.auth.allMessage);
   const {userInfo,currentChatUser}=useSelector((state)=> state.auth)
   const [message,setMessage]=useState();
@@ -41,9 +41,17 @@ function MessageBar() {
     
     try {
       const file=e.target.files[0];
+      console.log(file)
       const formData=new FormData();
+      const isImage = file.type.startsWith('image/');
+      // formData.append(isImage ? 'image' : 'document', file);
+      if(isImage)
       formData.append("image",file);
-      const response=await axios.post(ADD_IMAGE_ROUTE,formData,
+      else
+      formData.append("document",file)
+      console.log(formData);
+      // console.log(isImage);
+      const response=await axios.post(isImage ? ADD_IMAGE_ROUTE : ADD_DOCUMENT_ROUTE,formData,
         {
           headers:{
           "Content-Type":"multipart/form-data",

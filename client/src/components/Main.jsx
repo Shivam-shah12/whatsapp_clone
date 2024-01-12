@@ -19,6 +19,7 @@ import IncomingCall from "./common/IncomingCall";
 function Main() {
   const dispatch = useDispatch();
   const router = useRouter();
+  // const navigate=useNavigate();
   const [socketEvent, setSocketEvent] = useState(false);
   const { userInfo, currentChatUser, messageSearch, videoCall, voiceCall, incomingVoiceCall, incomingVideoCall } = useSelector((state) => state.auth);
   const [redirectLogin, setRedirectLogin] = useState(false);
@@ -26,9 +27,11 @@ function Main() {
 
   // Use onAuthStateChanged to listen for authentication state changes
   useEffect(() => {
+    console.log("userInfo = "+userInfo)
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (currentUser) => {
-      if (!currentUser) setRedirectLogin(true);
+      if (!currentUser) {setRedirectLogin(true);}
       if (!userInfo && currentUser?.email) {
+        console.log("Ye bhi chal raha hai")
         const { data } = await axios.post(CHECK_USER_ROUTE, { email: currentUser.email });
         dispatch(setUser(data.data));
         if (!data.status) {
@@ -36,10 +39,16 @@ function Main() {
         }
       }
     });
-
     // Cleanup the subscription when the component unmounts
     return () => unsubscribe();
   }, [userInfo, router, dispatch]);
+
+  useEffect(()=>{
+    if(redirectLogin)
+    {
+      router.push("/login");
+    }
+  },[redirectLogin])
 
   // Establish and cleanup socket connection
   useEffect(() => {

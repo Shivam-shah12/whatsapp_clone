@@ -1,6 +1,6 @@
 import React from 'react'
 import ChatContainer from "./ChatContainer";
-import ChatHeader from "./ChatHeader";
+import ChatHeader from './ChatHeader';
 import MessageBar from './MessageBar';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';

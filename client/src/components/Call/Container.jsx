@@ -17,12 +17,12 @@ function Container({data}) {
   const [publishStream,setPublishStream]=useState(undefined);
 
   const dispatch=useDispatch();
-
+  console.log(data)
   useEffect(()=>{
     console.log(data);
     if(data.type === "out-going")
     {
-      socket.on("accept-call",setCallAccepted(true))
+      socket.on("accept-call",(val)=>setCallAccepted(val))
      }
     else if(data.type==="incoming")
    {
@@ -81,39 +81,79 @@ function Container({data}) {
               dispatch(setEndCall());
             }
         });
+        
+// // Room status update callback
+// zg.on('roomStateChanged', (roomID, reason, errorCode, extendData) => {
+//   if (reason == ZegoRoomStateChangedReason.Logining) {
+//       // logging in
+//       // Represents the callback in the connection triggered by the developer actively calling loginRoom
+//   } else if (reason == ZegoRoomStateChangedReason.Logined) {
+//       // login successful
+//       //Only when the room status is successful login or reconnection, push streaming (startPublishingStream) and pull streaming (startPlayingStream) can normally receive and receive audio videos.
+//       //Push your own audio and video streams to ZEGOCLOUD audio and video cloud
+//   } else if (reason == ZegoRoomStateChangedReason.LoginFailed) {
+//       // Login failed
+//   } else if (reason == ZegoRoomStateChangedReason.Reconnecting) {
+//       // Reconnecting
+//   } else if (reason == ZegoRoomStateChangedReason.Reconnected) {
+//       // Reconnection successful
+//   } else if (reason == ZegoRoomStateChangedReason.ReconnectFailed) {
+//       // Reconnect failed
+//   } else if (reason == ZegoRoomStateChangedReason.Kickout) {
+//       // kicked out of the room
+//   } else if (reason == ZegoRoomStateChangedReason.Logout) {
+//       // Logout successful
+//   } else if (reason == ZegoRoomStateChangedReason.LogoutFailed) {
+//       // Logout failed
+//   }
+// });
         await zg.loginRoom(data.roomId.toString(),
         token,
         {userID:userInfo.id.toString(),userName:userInfo.name},
          {userUpdate:true}
-        );
-        const localStream=await zg.createStream({
-          camera:{
-            audio:true,
-            video:data.callType === "video" ? true :false,
+        ).then(async(result)=>{
+          if(result==true)
+          {
+            
+            const localStream=await zg.createStream({
+              camera:{
+                audio:{
+                  channelCount: 2
+                },
+                video:data?.callType === "video" ? true :false,
+              }
+            });
+    
+            const localVideo=document.getElementById("local-audio");
+            const element=document.createElement(
+              data.calltype === "video" ? "video" : "audio"
+            );
+            element.id = "video-local-zego";
+            element.className="h-30 w-32 relative";
+            element.autoplay=true;
+            element.muted=false;
+    
+            element.playsInline=true;
+            localVideo.appendChild(element);
+            const td=document.getElementById("video-local-zego");
+            if(td.tagName === "video")
+            td.srcObject=localStream;
+            const streamID='123'+Date.now();
+            setPublishStream(streamID);
+            setLocalStream(localStream);
+            zg.startPublishingStream(streamID,localStream);
+    
           }
-        });
+        })
+        
 
-        const localVideo=document.getElementById("local-audio");
-        const videoElement=document.createElement(
-          data.calltype === "video" ? "video" : "audio"
-        );
-        videoElement.id = "video-local-zego";
-        videoElement.className="h-28 w-32";
-        videoElement.autoplay=true;
-        videoElement.muted=false;
+        })
+        
+  
 
-        videoElement.playsInline=true;
-        localVideo.appendChild(videoElement);
-        const td=document.getElementById("video-local-zego");
-        td.srcObject=localStream;
-        const streamID='123'+Date.now();
-        setPublishStream(streamID);
-        setLocalStream(localStream);
-        zg.startPublishingStream(streamID,localStream);
-
-      })
+      
     }
-       if(token){
+    if(token){
     startCall();
   }
   },[token]);
@@ -145,9 +185,8 @@ function Container({data}) {
       <span className="text-5xl">{data.name}</span>
       <span className="text">
         {
-          callAccepted && data.callType !=="video" ? 
-          "on going call"
-          : "Calling"
+    !callAccepted  ? "Calling" : (data.callType !=="video" ? "on-going Call" : "")
+         
         }
       </span>
     </div>
@@ -157,7 +196,7 @@ function Container({data}) {
       </div>)
     }
      <div className="my-5 relative" id="remote-video">
-      <div className="absolute bottom-5 right-5" id="local-audio"></div>
+      <div className="absolute bottom-5 right-5 flex justify-center items-center" id="local-audio"></div>
      </div>
     <div className="h-16 w-16 bg-red-600 flex items-center justify-center rounded-full">
       <MdOutlineCallEnd className="text-3xl cursor-pointer" onClick={handleCallEnd}/>

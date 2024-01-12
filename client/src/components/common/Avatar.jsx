@@ -68,7 +68,7 @@ function Avatar({type,image,setImage}) {
   return (
      <>
      <div className="flex relative cursor-pointer" >
-       {
+        {
         type==="sm" && 
         <div className="relative cursor-pointer z-0">
         <div className={` h-14 w-14 `}>
@@ -83,11 +83,13 @@ function Avatar({type,image,setImage}) {
      <Image src={image} className="rounded-full" fill/>
         </div>
         </div>
-       }
+       } 
         {
         type==="xl" && 
         <div className="relative cursor-pointer z-0" onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}>
-          <div className={`z-10 bg-photopicker-overlay-background h-60 w-60 absolute top-0 left-0 rounded-full flex items-center justify-center flex-col text-center gap-2 ${hover ? "visible" : "hidden"}`}
+
+          <div className={`z-10 bg-photopicker-overlay-background h-60 w-60 absolute top-0 left-0 
+          rounded-full flex items-center justify-center flex-col text-center gap-2 ${hover ? "visible" : "hidden"}`}
           onClick={e => showContextMenu(e)} id="context-opener"
           >
             <FaCamera className="text-2xl text-white" id="context-opener"  onClick={e => showContextMenu(e)}/>

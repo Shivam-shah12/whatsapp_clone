@@ -4,29 +4,28 @@ import { FcMissedCall } from "react-icons/fc";
 import { BiVideo } from "react-icons/bi";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { setMessageSearch, setVideoCall, setVoiceCall } from "@/reducer/Slices/authSlice";
-
-
+import ContextMenu from "../common/ContextMenu";  // <-- Check this import
+// impor { setExitChat, setVideoCall, setVoiceCall, setMessageSearch } from";
+import { setExitChat,setVideoCall,setVoiceCall,setMessageSearch } from "@/reducer/Slices/authSlice";
 function ChatHeader() {
   const {currentChatUser,messageSearch}=useSelector((state)=> state.auth);
   const dispatch=useDispatch();
   console.log(messageSearch)
   const [isContextMenuVisible,setIsContextMenuVisible]=useState(false);
-  const [contextMenuCordinates,setcontextMenuCordinates]=useState({
+  const [contextMenuCoordinates,setcontextMenuCoordinates]=useState({
     x:0,y:0
   })
   const showContextMenu=(e)=>{
     e.preventDefault();
     setIsContextMenuVisible(true);
-    setcontextMenuCordinates({x:e.pageX,y:e.pageY});
+    setcontextMenuCoordinates({x:e.pageX,y:e.pageY});
 }
 
 const showContextMenuOption = [
   { name: 'Exit', callback: async() => {
-    // isko define karna hai --> resume video from 10:02:52
-    dispatch(setExitChat());
+    dispatch(setExitChat(undefined));
   } }
 ];
 
@@ -70,16 +69,17 @@ const showContextMenuOption = [
       />
       <BiSearchAlt2 className="text-panel-header-icon cursor-pointer text-xl" onClick={()=>dispatch(setMessageSearch(!messageSearch))} />
       <BsThreeDotsVertical className="text-panel-header-icon cursor-pointer text-xl"
-       onClick={()=>showContextMenu(e) }
+       onClick={(e)=>showContextMenu(e) }
        id="context-opener"
       />
      {
       isContextMenuVisible && (
         <ContextMenu
         options={showContextMenuOption}
-        cordinates={contextMenuCordinates}
+        coordinates={contextMenuCoordinates}
         contextMenu={isContextMenuVisible}
         setContextMenu={setIsContextMenuVisible}
+        aligning={"right"}
         
         />
       )

@@ -81,6 +81,39 @@ export const getMessage=async(req,res,next)=>{
     }
 }
 
+export const addDocumentMessage=async(req,res,next)=>{
+    console.log("Document api Calls")
+    try {
+        if(req.file)
+        {
+            const data=Date.now();
+            let fileName="uploads/document/"+data+req.file.originalname;
+            fs.renameSync(req.file.path,fileName);
+            const prisma=getPrismaInstance();
+            const {from,to}=req.query;
+            if(from && to)
+            {
+                const newMessages=await prisma.messages.create({
+                    data:{
+                        message:fileName,
+                        sender:{connect:{id:parseInt(from)}},
+                        receiver:{connect:{id:parseInt(to)}},
+                        type:"document"
+                    },
+                })
+                return res.status(201).json({newMessages,signal:"successfully save and send the image"});
+            }
+            return res.status(400).json("from && to are required");
+        }
+        
+        return res.status(400).json("Documents is required");
+        
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 
 export const addImageMessage=async(req,res,next)=>{
     try {

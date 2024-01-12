@@ -16,7 +16,7 @@ function login() {
   const handleLogin=async ()=>{
    const provider=new GoogleAuthProvider();
   const {user}=await signInWithPopup(firebaseAuth,provider);
-   console.log(user.email + " "+user.displayName+" "+user.photoURL);
+  //  console.log(user.email + " "+user.displayName+" "+user.photoURL);
    try {
      if(user.email)
      {
@@ -26,7 +26,7 @@ function login() {
         console.log(data);
         // agar data.success = false hai iska mtlb vo data hamare db me nahi
         // toh iska mtlb newUser aya hai --> toh hum usse onboarding page par bhej denge
-        if(!data.data.status)
+        if(!data.status)
         {
           // dispatch({type:reducerCases.SET_NEW_USER,newUser:true})
           dispatch(setNewUser(true));
@@ -39,11 +39,7 @@ function login() {
         }
         else
         {
-          const userInfo={
-            name:data.data.displayName,email:data.data.email,photoImage:data.data.photoURL
-          }
-          console.log(userInfo)
-          dispatch(setUser(userInfo))
+          dispatch(setUser(data?.data.data))
           router.push("/")
         }
      }
